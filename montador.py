@@ -9,10 +9,14 @@ def Qual_instrucao(instrucao):
         return aand
     elif instrucao[0] == 'ori':
         return ori
+    elif instrucao[0] == 'or':
+        return oor
     elif instrucao[0] == 'sll':
         return sll
     elif instrucao[0] == 'bne':
         return bne
+    elif instrucao[0] == 'li':
+        return addi
 
 def lb(elementos):
 
@@ -56,6 +60,23 @@ def add(elementos):
     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
     return palavra
 
+def addi(elementos):
+    
+    if(elementos[0] == 'li'):
+        elementos[0] = 'addi'
+        elementos.insert(2, 'x0')
+
+    opcode = "0010011"
+    funct3 = "000"
+
+    rd = format(int(elementos[1][1:]), '05b')
+    # rs1 = format(int(elementos[2][2:]), '05b')  
+    rs1 = format(int(elementos[2][1:]), '05b')  
+    immediate = format(int(elementos[3]), '012b')
+    
+    palavra = immediate + rs1 + funct3 + rd + opcode
+    return palavra
+    
 def aand(elementos):
 
     opcode = "0110011"
@@ -69,10 +90,25 @@ def aand(elementos):
     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
     return palavra
 
+def oor(elementos):
+
+    opcode = "0110011"
+    funct3 = "110"
+    funct7 = "0000000"
+
+    rd = format(int(elementos[1][1:]), '05b')
+    rs1 = format(int(elementos[2][2:]), '05b')
+    rs2 = format(int(elementos[3][2:]), '05b')
+
+    palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+    return palavra
+
+
 def ori(elementos):
 
     opcode = "0010011"
     funct3 = "110"
+
     rd = format(int(elementos[1][1:]), '05b')
     rs1 = format(int(elementos[2][2:]), '05b')
     immediate = format(int(elementos[3]), '012b')
@@ -93,12 +129,35 @@ def sll(elementos):
     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
     return palavra
 
-instrucao = str(input())
-elementos = instrucao.split(',')
-print(elementos)
-primeiro, segundo = elementos[0].split(' ')
-elementos[0] = primeiro
-elementos.insert(1, segundo)
-print(elementos)
-print(instrucao)
-print(Qual_instrucao(elementos)(elementos))
+def bne(elementos):
+    
+    opcode = "1100011"
+    funct3 = "001"
+
+    rd = format(int(elementos[1][1:]), '05b')
+    rs1 = format(int(elementos[2][1:]), '05b')
+    immediate = format(int(elementos[3]), '012b')
+    
+    palavra = immediate + rs1 + funct3 + rd + opcode
+    return palavra
+
+
+# instrucao = str(input())
+# elementos = instrucao.split(',')
+# print(elementos)
+# primeiro, segundo = elementos[0].split(' ')
+# elementos[0] = primeiro
+# elementos.insert(1, segundo)
+# print(elementos)
+# print(instrucao)
+# print(Qual_instrucao(elementos)(elementos))
+
+while True:
+    instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
+    if instrucao == 'fim':
+        break
+    elementos = instrucao.split(',')
+    primeiro, segundo = elementos[0].split(' ')
+    elementos[0] = primeiro
+    elementos.insert(1, segundo)
+    print(Qual_instrucao(elementos)(elementos))
