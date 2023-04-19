@@ -45,6 +45,85 @@ instrucoes = {
     }
 }
 
+def montar(instrucao):
+    if(instrucoes[instrucao[0]]["formato"] == "R"):
+        return montar_R(instrucao)
+    elif(instrucoes[instrucao[0]]["formato"] == "I"):
+        return montar_I(instrucao)
+    elif(instrucoes[instrucao[0]]["formato"] == "S"):
+        return montar_S(instrucao)
+    else:
+        print("Instrução não reconhecida")
+
+def montar_R(instrucao):
+    opcode = instrucoes[instrucao[0]]["opcode"]
+    funct3 = instrucoes[instrucao[0]]["funct3"]
+    funct7 = instrucoes[instrucao[0]]["funct7"]
+
+    rd = format(int(instrucao[1][1:]), '05b')
+    rs1 = format(int(instrucao[2][1:]), '05b')
+    rs2 = format(int(instrucao[3][1:]), '05b')
+
+    palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+    return palavra
+
+def montar_I(instrucao):
+    opcode = instrucoes[instrucao[0]]["opcode"]
+    funct3 = instrucoes[instrucao[0]]["funct3"]
+
+    rd = format(int(instrucao[1][1:]), '05b')
+    rs1 = format(int(instrucao[2][1:]), '05b')
+    immediate = format(int(instrucao[3]), '012b')
+
+    palavra = immediate + rs1 + funct3 + rd + opcode
+    return palavra  
+
+def montar_S(instrucao):
+    opcode = instrucoes[instrucao[0]]["opcode"]
+    funct3 = instrucoes[instrucao[0]]["funct3"]
+
+    rs1 = format(int(instrucao[1][1:]), '05b')
+    rs2 = format(int(instrucao[2][1:]), '05b')
+    immediate = format(int(instrucao[3]), '012b')
+
+    palavra = immediate[11:5] + rs2 + rs1 + funct3 + immediate[4:0] + opcode
+    return palavra
+# def montar_R(instrucao):
+#     opcode = instrucoes[instrucao[0]]["opcode"]
+#     funct3 = instrucoes[instrucao[0]]["funct3"]
+#     funct7 = instrucoes[instrucao[0]]["funct7"]
+
+#     rd = format(int(instrucao[1][1:]), '05b')
+#     rs1 = format(int(instrucao[2][2:]), '05b')
+#     rs2 = format(int(instrucao[3][2:]), '05b')
+
+#     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+#     return palavra
+
+# def montar_I(instrucao):
+#     opcode = instrucoes[instrucao[0]]["opcode"]
+#     funct3 = instrucoes[instrucao[0]]["funct3"]
+
+#     rd = format(int(instrucao[1][1:]), '05b')
+#     rs1 = format(int(instrucao[2][2:]), '05b')
+#     immediate = format(int(instrucao[3]), '012b')
+
+#     palavra = immediate + rs1 + funct3 + rd + opcode
+#     return palavra
+
+# def montar_S(instrucao):
+#     opcode = instrucoes[instrucao[0]]["opcode"]
+#     funct3 = instrucoes[instrucao[0]]["funct3"]
+
+#     offset, origem = instrucao[2].split('(')
+#     origem = origem.replace(")", "")
+#     rs1 = format(int(origem[1:]), '05b')
+#     rs2 = format(int(instrucao[1][2:]), '05b')
+#     immediate = format(int(offset), '012b')
+
+#     palavra = immediate + rs2 + rs1 + funct3 + opcode
+#     return palavra
+
 def Qual_instrucao(instrucao):
     if instrucao[0] == 'lb':
         return lb
@@ -199,12 +278,15 @@ def bne(elementos):
 # print(instrucao)
 # print(Qual_instrucao(elementos)(elementos))
 
+bits = None
 while True:
     instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
     if instrucao == 'fim':
         break
     instrucao = instrucao.replace(',', '')
-    elementos = instrucao.split(' ')    
+    elementos = instrucao.split(' ')
+    # print(instrucoes[elementos[0]]['formato'])
+    montar(elementos)
     # primeiro, segundo = elementos[0].split(' ')
     # elementos[0] = primeiro
     # elementos.insert(1, segundo)
