@@ -1,3 +1,50 @@
+instrucoes = {
+    "lb": {
+        "opcode": "0000011",
+        "funct3": "000",
+        "formato": "I"
+    }, 
+    
+    "sb": {
+        "opcode": "0100011",
+        "funct3": "000",
+        "formato": "S"
+    },
+
+    "add": {
+        "opcode": "0110011",
+        "funct3": "000",
+        "funct7": "0000000",
+        "formato": "R"
+    },
+
+    "addi": {
+        "opcode": "0010011",
+        "funct3": "000",
+        "formato": "I"
+    },
+
+    "and": {
+        "opcode": "0110011",
+        "funct3": "111",
+        "funct7": "0000000",
+        "formato": "R"
+    },
+
+    "ori": {
+        "opcode": "0010011",
+        "funct3": "110",
+        "formato": "I"
+    },
+
+    "sll": {
+        "opcode": "0110011",
+        "funct3": "001",
+        "funct7": "0000000",
+        "formato": "R"
+    }
+}
+
 def Qual_instrucao(instrucao):
     if instrucao[0] == 'lb':
         return lb
@@ -156,8 +203,9 @@ while True:
     instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
     if instrucao == 'fim':
         break
-    elementos = instrucao.split(',')
-    primeiro, segundo = elementos[0].split(' ')
-    elementos[0] = primeiro
-    elementos.insert(1, segundo)
-    print(Qual_instrucao(elementos)(elementos))
+    instrucao = instrucao.replace(',', '')
+    elementos = instrucao.split(' ')    
+    # primeiro, segundo = elementos[0].split(' ')
+    # elementos[0] = primeiro
+    # elementos.insert(1, segundo)
+    # print(Qual_instrucao(elementos)(elementos))
