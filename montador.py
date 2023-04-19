@@ -42,6 +42,19 @@ instrucoes = {
         "funct3": "001",
         "funct7": "0000000",
         "formato": "R"
+    },
+
+    "or": {
+        "opcode": "0110011",
+        "funct3": "110",
+        "funct7": "0000000",
+        "formato": "R"
+    },
+
+    "andi": {
+        "opcode": "0010011",
+        "funct3": "111",
+        "formato": "I"
     }
 }
 
@@ -73,7 +86,7 @@ def montar_I(instrucao):
 
     rd = format(int(instrucao[1][1:]), '05b')
     rs1 = format(int(instrucao[2][1:]), '05b')
-    immediate = format(int(instrucao[3]), '012b')
+    immediate = format(int(instrucao[3]), '012b') 
 
     palavra = immediate + rs1 + funct3 + rd + opcode
     return palavra  
@@ -88,6 +101,25 @@ def montar_S(instrucao):
 
     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
     return palavra
+
+bits = ""
+while True:
+    instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
+    if instrucao == 'fim':
+        break
+    instrucao = instrucao.replace(',', '')
+    elementos = instrucao.split(' ')
+    if(elementos[0][0] == 'sb' or elementos[0][0] == 'lb'):
+        offset, elementos[2] = elementos[2].replace(')', '').split('(')
+        elementos.insert(3, offset)
+    bits += (montar(elementos)) + "\n"
+print(bits)
+
+
+
+
+
+
 # def montar_R(instrucao):
 #     opcode = instrucoes[instrucao[0]]["opcode"]
 #     funct3 = instrucoes[instrucao[0]]["funct3"]
@@ -277,24 +309,3 @@ def montar_S(instrucao):
 # print(elementos)
 # print(instrucao)
 # print(Qual_instrucao(elementos)(elementos))
-
-bits = None
-while True:
-    instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
-    if instrucao == 'fim':
-        break
-    instrucao = instrucao.replace(',', '')
-    elementos = instrucao.split(' ')
-    # print(instrucoes[elementos[0]]['formato'])
-    if(elementos[0][0] == 's' or elementos[0][0] == 'l'):
-        elementos[2] = elementos[2].replace(')', '')
-        offset, origem = elementos[2].split('(')
-        elementos[2] = origem
-        elementos.insert(3, offset)
-    print(offset, origem)
-    print(elementos)
-    print(montar(elementos))
-    # primeiro, segundo = elementos[0].split(' ')
-    # elementos[0] = primeiro
-    # elementos.insert(1, segundo)
-    # print(Qual_instrucao(elementos)(elementos))
