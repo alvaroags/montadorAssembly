@@ -86,7 +86,7 @@ def montar_S(instrucao):
     rs2 = format(int(instrucao[2][1:]), '05b')
     immediate = format(int(instrucao[3]), '012b')
 
-    palavra = immediate[11:5] + rs2 + rs1 + funct3 + immediate[4:0] + opcode
+    palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
     return palavra
 # def montar_R(instrucao):
 #     opcode = instrucoes[instrucao[0]]["opcode"]
@@ -124,148 +124,148 @@ def montar_S(instrucao):
 #     palavra = immediate + rs2 + rs1 + funct3 + opcode
 #     return palavra
 
-def Qual_instrucao(instrucao):
-    if instrucao[0] == 'lb':
-        return lb
-    elif instrucao[0] == 'sb':
-        return sb
-    elif instrucao[0] == 'add':
-        return add
-    elif instrucao[0] == 'and':
-        return aand
-    elif instrucao[0] == 'ori':
-        return ori
-    elif instrucao[0] == 'or':
-        return oor
-    elif instrucao[0] == 'sll':
-        return sll
-    elif instrucao[0] == 'bne':
-        return bne
-    elif instrucao[0] == 'li':
-        return addi
+# def Qual_instrucao(instrucao):
+#     if instrucao[0] == 'lb':
+#         return lb
+#     elif instrucao[0] == 'sb':
+#         return sb
+#     elif instrucao[0] == 'add':
+#         return add
+#     elif instrucao[0] == 'and':
+#         return aand
+#     elif instrucao[0] == 'ori':
+#         return ori
+#     elif instrucao[0] == 'or':
+#         return oor
+#     elif instrucao[0] == 'sll':
+#         return sll
+#     elif instrucao[0] == 'bne':
+#         return bne
+#     elif instrucao[0] == 'li':
+#         return addi
 
-def lb(elementos):
+# def lb(elementos):
 
-    opcode = "0000011"
-    funct3 = "000"
+#     opcode = "0000011"
+#     funct3 = "000"
 
-    offset, origem = elementos[2].split('(')  
-    origem = origem.replace(")", "")
-    rs1 = format(int(origem[1:]), '05b')
-    immediate = format(int(offset), '012b')
-    rd = format(int(elementos[1][1:]), '05b')
-    palavra = immediate + rs1 + funct3 + rd + opcode
+#     offset, origem = elementos[2].split('(')  
+#     origem = origem.replace(")", "")
+#     rs1 = format(int(origem[1:]), '05b')
+#     immediate = format(int(offset), '012b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     palavra = immediate + rs1 + funct3 + rd + opcode
 
-    return palavra
+#     return palavra
 
-def sb(elementos):
+# def sb(elementos):
 
-    opcode = "0100011"
-    funct3 = "000"
+#     opcode = "0100011"
+#     funct3 = "000"
 
-    offset, origem = elementos[2].split('(')
-    origem = origem.replace(")", "")
-    rs1 = format(int(origem[1:]), '05b')
-    rs2 = format(int(elementos[1][1:]), '05b')
-    immediate = format(int(offset), '012b')
+#     offset, origem = elementos[2].split('(')
+#     origem = origem.replace(")", "")
+#     rs1 = format(int(origem[1:]), '05b')
+#     rs2 = format(int(elementos[1][1:]), '05b')
+#     immediate = format(int(offset), '012b')
 
-    palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
+#     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
     
-    return palavra
+#     return palavra
 
-def add(elementos):
+# def add(elementos):
 
-    opcode = "0110011"
-    funct3 = "000"
-    funct7 = "0000000"
+#     opcode = "0110011"
+#     funct3 = "000"
+#     funct7 = "0000000"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    rs1 = format(int(elementos[2][2:]), '05b')
-    rs2 = format(int(elementos[3][2:]), '05b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     rs1 = format(int(elementos[2][2:]), '05b')
+#     rs2 = format(int(elementos[3][2:]), '05b')
 
-    palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
-    return palavra
+#     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+#     return palavra
 
-def addi(elementos):
+# def addi(elementos):
     
-    if(elementos[0] == 'li'):
-        elementos[0] = 'addi'
-        elementos.insert(2, 'x0')
+#     if(elementos[0] == 'li'):
+#         elementos[0] = 'addi'
+#         elementos.insert(2, 'x0')
 
-    opcode = "0010011"
-    funct3 = "000"
+#     opcode = "0010011"
+#     funct3 = "000"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    # rs1 = format(int(elementos[2][2:]), '05b')  
-    rs1 = format(int(elementos[2][1:]), '05b')  
-    immediate = format(int(elementos[3]), '012b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     # rs1 = format(int(elementos[2][2:]), '05b')  
+#     rs1 = format(int(elementos[2][1:]), '05b')  
+#     immediate = format(int(elementos[3]), '012b')
     
-    palavra = immediate + rs1 + funct3 + rd + opcode
-    return palavra
+#     palavra = immediate + rs1 + funct3 + rd + opcode
+#     return palavra
     
-def aand(elementos):
+# def aand(elementos):
 
-    opcode = "0110011"
-    funct3 = "111"
-    funct7 = "0000000"
+#     opcode = "0110011"
+#     funct3 = "111"
+#     funct7 = "0000000"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    rs1 = format(int(elementos[2][2:]), '05b')
-    rs2 = format(int(elementos[3][2:]), '05b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     rs1 = format(int(elementos[2][2:]), '05b')
+#     rs2 = format(int(elementos[3][2:]), '05b')
 
-    palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
-    return palavra
+#     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+#     return palavra
 
-def oor(elementos):
+# def oor(elementos):
 
-    opcode = "0110011"
-    funct3 = "110"
-    funct7 = "0000000"
+#     opcode = "0110011"
+#     funct3 = "110"
+#     funct7 = "0000000"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    rs1 = format(int(elementos[2][2:]), '05b')
-    rs2 = format(int(elementos[3][2:]), '05b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     rs1 = format(int(elementos[2][2:]), '05b')
+#     rs2 = format(int(elementos[3][2:]), '05b')
 
-    palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
-    return palavra
+#     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+#     return palavra
 
 
-def ori(elementos):
+# def ori(elementos):
 
-    opcode = "0010011"
-    funct3 = "110"
+#     opcode = "0010011"
+#     funct3 = "110"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    rs1 = format(int(elementos[2][2:]), '05b')
-    immediate = format(int(elementos[3]), '012b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     rs1 = format(int(elementos[2][2:]), '05b')
+#     immediate = format(int(elementos[3]), '012b')
 
-    palavra = immediate + rs1 + funct3 + rd + opcode
-    return palavra
+#     palavra = immediate + rs1 + funct3 + rd + opcode
+#     return palavra
 
-def sll(elementos):
+# def sll(elementos):
 
-    opcode = "0110011"
-    funct3 = "001"
-    funct7 = "0000000"
+#     opcode = "0110011"
+#     funct3 = "001"
+#     funct7 = "0000000"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    rs1 = format(int(elementos[2][2:]), '05b')
-    rs2 = format(int(elementos[3][2:]), '05b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     rs1 = format(int(elementos[2][2:]), '05b')
+#     rs2 = format(int(elementos[3][2:]), '05b')
 
-    palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
-    return palavra
+#     palavra = funct7 + rs2 + rs1 + funct3+ rd + opcode
+#     return palavra
 
-def bne(elementos):
+# def bne(elementos):
     
-    opcode = "1100011"
-    funct3 = "001"
+#     opcode = "1100011"
+#     funct3 = "001"
 
-    rd = format(int(elementos[1][1:]), '05b')
-    rs1 = format(int(elementos[2][1:]), '05b')
-    immediate = format(int(elementos[3]), '012b')
+#     rd = format(int(elementos[1][1:]), '05b')
+#     rs1 = format(int(elementos[2][1:]), '05b')
+#     immediate = format(int(elementos[3]), '012b')
     
-    palavra = immediate + rs1 + funct3 + rd + opcode
-    return palavra
+#     palavra = immediate + rs1 + funct3 + rd + opcode
+#     return palavra
 
 
 # instrucao = str(input())
@@ -286,7 +286,14 @@ while True:
     instrucao = instrucao.replace(',', '')
     elementos = instrucao.split(' ')
     # print(instrucoes[elementos[0]]['formato'])
-    montar(elementos)
+    if(elementos[0][0] == 's' or elementos[0][0] == 'l'):
+        elementos[2] = elementos[2].replace(')', '')
+        offset, origem = elementos[2].split('(')
+        elementos[2] = origem
+        elementos.insert(3, offset)
+    print(offset, origem)
+    print(elementos)
+    print(montar(elementos))
     # primeiro, segundo = elementos[0].split(' ')
     # elementos[0] = primeiro
     # elementos.insert(1, segundo)
