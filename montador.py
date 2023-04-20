@@ -1,3 +1,26 @@
+
+# def montar_I(instrucao):
+#     opcode = instrucoes[instrucao[0]]["opcode"]
+#     funct3 = instrucoes[instrucao[0]]["funct3"]
+
+#     rd = format(int(instrucao[1][1:]), '05b')
+#     rs1 = format(int(instrucao[2][1:]), '05b')
+#     immediate = format(int(instrucao[3]), '012b') 
+
+#     palavra = immediate + rs1 + funct3 + rd + opcode
+#     return palavra  
+
+# def montar_S(instrucao):
+#     opcode = instrucoes[instrucao[0]]["opcode"]
+#     funct3 = instrucoes[instrucao[0]]["funct3"]
+
+#     rs1 = format(int(instrucao[1][1:]), '05b')
+#     rs2 = format(int(instrucao[2][1:]), '05b')
+#     immediate = format(int(instrucao[3]), '012b')
+
+#     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
+#     return palavra
+
 instrucoes = {
     "lb": {
         "opcode": "0000011",
@@ -77,28 +100,6 @@ def montar(instrucao):
     else:
         print("Instrução não reconhecida")
 
-# def montar_I(instrucao):
-#     opcode = instrucoes[instrucao[0]]["opcode"]
-#     funct3 = instrucoes[instrucao[0]]["funct3"]
-
-#     rd = format(int(instrucao[1][1:]), '05b')
-#     rs1 = format(int(instrucao[2][1:]), '05b')
-#     immediate = format(int(instrucao[3]), '012b') 
-
-#     palavra = immediate + rs1 + funct3 + rd + opcode
-#     return palavra  
-
-# def montar_S(instrucao):
-#     opcode = instrucoes[instrucao[0]]["opcode"]
-#     funct3 = instrucoes[instrucao[0]]["funct3"]
-
-#     rs1 = format(int(instrucao[1][1:]), '05b')
-#     rs2 = format(int(instrucao[2][1:]), '05b')
-#     immediate = format(int(instrucao[3]), '012b')
-
-#     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
-#     return palavra
-
 def montar_R(instrucao):
     opcode = instrucoes[instrucao[0]]["opcode"]
     funct3 = instrucoes[instrucao[0]]["funct3"]
@@ -159,14 +160,40 @@ def base(instrucao):
 
 
 bits = ""
-while True:
-    instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
+# while True:
+#     instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
+#     if instrucao == 'fim':
+#         break
+#     instrucao = instrucao.replace(',', '')
+#     elementos = instrucao.split(' ')
+#     if(elementos[0] == 'sb' or elementos[0] == 'lb'):
+#         offset, elementos[2] = elementos[2].replace(')', '').split('(')
+#         elementos.insert(3, offset)
+#     bits += (montar(elementos)) + "\n"
+# print(bits)
+
+contador = 0
+
+with open('entrada.ams', 'r') as arquivo:
+    conteudo = arquivo.read()
+    instrucao = conteudo.split('\n')
+    tamanho = len(instrucao)
+print(f'\n{conteudo}\n')
+while contador != tamanho:
+
     if instrucao == 'fim':
         break
-    instrucao = instrucao.replace(',', '')
-    elementos = instrucao.split(' ')
+
+    instrucao[contador] = instrucao[contador].replace(',', '')
+    elementos = instrucao[contador].split(' ')
     if(elementos[0] == 'sb' or elementos[0] == 'lb'):
         offset, elementos[2] = elementos[2].replace(')', '').split('(')
         elementos.insert(3, offset)
-    bits += (montar(elementos)) + "\n"
+    #bits += (montar(elementos)) + "\n"
+    bits += format(int(montar(elementos), 2), '08x') + "\n"
+    contador += 1
+
 print(bits)
+
+with open('saida.txt', 'w') as f:
+    f.write(bits)
