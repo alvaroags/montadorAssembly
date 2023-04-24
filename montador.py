@@ -1,25 +1,4 @@
 import argparse
-# def montar_I(instrucao):
-#     opcode = instrucoes[instrucao[0]]["opcode"]
-#     funct3 = instrucoes[instrucao[0]]["funct3"]
-
-#     rd = format(int(instrucao[1][1:]), '05b')
-#     rs1 = format(int(instrucao[2][1:]), '05b')
-#     immediate = format(int(instrucao[3]), '012b') 
-
-#     palavra = immediate + rs1 + funct3 + rd + opcode
-#     return palavra  
-
-# def montar_S(instrucao):
-#     opcode = instrucoes[instrucao[0]]["opcode"]
-#     funct3 = instrucoes[instrucao[0]]["funct3"]
-
-#     rs1 = format(int(instrucao[1][1:]), '05b')
-#     rs2 = format(int(instrucao[2][1:]), '05b')
-#     immediate = format(int(instrucao[3]), '012b')
-
-#     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
-#     return palavra
 
 instrucoes = {
     "lb": {
@@ -99,6 +78,18 @@ instrucoes = {
         "formato": "I"
     },
     
+    "li":{
+        "opcode": "0010011",
+        "funct3": "000",
+        "formato": "I"
+    },
+
+    "mv":{
+        "opcode": "0010011",
+        "funct3": "000",
+        "formato": "I"
+    },
+    
     "andi": {
         "opcode": "0010011",
         "funct3": "111",
@@ -136,6 +127,42 @@ instrucoes = {
         "funct3": "000",
         "formato": "SB"
     },
+
+    "blt":{
+        "opcode": "1100011",
+        "funct3": "100",
+        "formato": "SB"
+    },
+    
+    "bge":{
+        "opcode": "1100011",
+        "funct3": "101",
+        "formato": "SB"
+    },
+
+    "bnez":{
+        "opcode": "1100011",
+        "funct3": "001",
+        "formato": "SB"
+    },
+
+    "beqz":{
+        "opcode": "1100011",
+        "funct3": "000",
+        "formato": "SB"
+    },
+
+    "bltz":{
+        "opcode": "1100011",
+        "funct3": "100",
+        "formato": "SB"
+    },
+
+    "bgez":{
+        "opcode": "1100011",
+        "funct3": "101",
+        "formato": "SB"
+    }
 }
 
 
@@ -147,7 +174,7 @@ def montar(instrucao):
     elif(instrucoes[instrucao[0]]["formato"] == "S"):
         return montar_S(instrucao)
     elif(instrucoes[instrucao[0]]["formato"] == "SB"):
-        return montar_S(instrucao)
+        return montar_sb(instrucao)
     else:
         print("Instrução não reconhecida")
 
@@ -167,6 +194,10 @@ def montar_R(instrucao):
 def montar_I(instrucao):
     opcode = instrucoes[instrucao[0]]["opcode"]
     funct3 = instrucoes[instrucao[0]]["funct3"]
+    if(instrucao[0] == "li"):
+        instrucao.insert(2, "x0")
+    if(instrucao[0] == "mv"):
+        instrucao.insert(3, "0")
 
     rd = format(int(instrucao[1][1:]), '05b')
     rs1 = format(int(instrucao[2][1:]), '05b')
@@ -189,7 +220,8 @@ def montar_S(instrucao):
 def montar_sb(instrucao):
     opcode = instrucoes[instrucao[0]]["opcode"]
     funct3 = instrucoes[instrucao[0]]["funct3"]
-
+    if(instrucao[0] == "bnez" or instrucao[0] == "beqz" or instrucao[0] == "bltz" or instrucao[0] == "bgez"):
+        instrucao.insert(2, "x0")
     rs1 = format(int(instrucao[1][1:]), '05b')
     rs2 = format(int(instrucao[2][1:]), '05b')
 
@@ -221,12 +253,6 @@ parser = argparse.ArgumentParser(description='Montador de código assembly para 
 parser.add_argument('entrada', type=str, help='Arquivo de entrada')
 parser.add_argument('-o', '--saida', type=str, help='Arquivo de saída')
 args = parser.parse_args()
-
-# print('Arquivo de entrada: ', args.entrada)
-# if args.saida:
-#     print('Arquivo de saída: ', args.saida)
-# else:
-#     print('Nenhum arquivo de saída especificado')
 
 bits = ""
 contador = 0
