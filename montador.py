@@ -210,10 +210,9 @@ def montar_S(instrucao):
     opcode = instrucoes[instrucao[0]]["opcode"]
     funct3 = instrucoes[instrucao[0]]["funct3"]
 
-    rs1 = format(int(instrucao[1][1:]), '05b')
-    rs2 = format(int(instrucao[2][1:]), '05b')
+    rs1 = format(int(instrucao[2][1:]), '05b')
+    rs2 = format(int(instrucao[1][1:]), '05b')
     immediate = base(instrucao)
-
     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
     return palavra
 
@@ -255,6 +254,7 @@ parser.add_argument('-o', '--saida', type=str, help='Arquivo de saída')
 args = parser.parse_args()
 
 bits = ""
+hexa = ""
 contador = 0
 
 with open(args.entrada, 'r') as arquivo:
@@ -272,11 +272,40 @@ while contador != tamanho :
         offset, elementos[2] = elementos[2].replace(')', '').split('(')
         elementos.insert(3, offset)
     bits += (montar(elementos)) + "\n"
-    # bits += hex(int(montar(elementos), base=2)) + "\n"
+    hexa += hex(int(montar(elementos), base=2)) + "\n"
     contador += 1
 
 if args.saida:
     with open(f"{args.saida}.bin", 'w') as f:
         f.write(bits)
+        f.write(hexa)
 else:
     print(bits)
+    print(hexa)
+
+#entrada com cada uma das instruções
+#add x1, x2, x3
+#sub x1, x2, x3
+#and x1, x2, x3
+#or x1, x2, x3
+#xor x1, x2, x3
+#sll x1, x2, x3
+#srl x1, x2, x3
+#bne x1, x2, 0x10
+#beq x1, x2, 0x10
+#sb x1, 0x10(x2)
+#lb x1, 0x10(x2)
+#sw x1, 0x10(x2)
+#lw x1, 0x10(x2)
+#sh x1, 0x10(x2)
+#lh x1, 0x10(x2)
+
+#pseudo instruções
+#li x1, 0x10
+#mv x1, x2
+#bnez x1, 0x10
+#beqz x1, 0x10
+#bltz x1, 0x10
+#bgez x1, 0x10
+#bge x1, x2, 0x10
+#blt x1, x2, 0x10
