@@ -1,4 +1,3 @@
-
 # def montar_I(instrucao):
 #     opcode = instrucoes[instrucao[0]]["opcode"]
 #     funct3 = instrucoes[instrucao[0]]["funct3"]
@@ -28,9 +27,33 @@ instrucoes = {
         "formato": "I"
     }, 
     
+    "lh": {
+        "opcode": "0000011",
+        "funct3": "001",
+        "formato": "I"
+    },
+
+    "lw": {
+        "opcode": "0000011",
+        "funct3": "010",
+        "formato": "I"
+    },
+
     "sb": {
         "opcode": "0100011",
         "funct3": "000",
+        "formato": "S"
+    },
+
+    "sh": {
+        "opcode": "0100011",
+        "funct3": "001",
+        "formato": "S"
+    },
+    
+    "sw": {
+        "opcode": "0100011",
+        "funct3": "010",
         "formato": "S"
     },
 
@@ -41,10 +64,11 @@ instrucoes = {
         "formato": "R"
     },
 
-    "addi": {
-        "opcode": "0010011",
+    "sub": {
+        "opcode": "0110011",
         "funct3": "000",
-        "formato": "I"
+        "funct7": "0100000",
+        "formato": "R"
     },
 
     "and": {
@@ -52,6 +76,32 @@ instrucoes = {
         "funct3": "111",
         "funct7": "0000000",
         "formato": "R"
+    },
+
+    "or": {
+        "opcode": "0110011",
+        "funct3": "110",
+        "funct7": "0000000",
+        "formato": "R"
+    },
+    
+    "xor": {
+        "opcode": "0110011",
+        "funct3": "100",
+        "funct7": "0000000",
+        "formato": "R"
+    },
+
+    "addi": {
+        "opcode": "0010011",
+        "funct3": "000",
+        "formato": "I"
+    },
+    
+    "andi": {
+        "opcode": "0010011",
+        "funct3": "111",
+        "formato": "I"
     },
 
     "ori": {
@@ -67,24 +117,24 @@ instrucoes = {
         "formato": "R"
     },
 
-    "or": {
+    "srl": {
         "opcode": "0110011",
-        "funct3": "110",
+        "funct3": "101",
         "funct7": "0000000",
         "formato": "R"
-    },
-
-    "andi": {
-        "opcode": "0010011",
-        "funct3": "111",
-        "formato": "I"
     },
 
     "bne": {
         "opcode": "1100011",
         "funct3": "001",
         "formato": "SB"
-    }
+    },
+
+    "beq": {
+        "opcode": "1100011",
+        "funct3": "000",
+        "formato": "SB"
+    },
 }
 
 
@@ -174,7 +224,7 @@ bits = ""
 
 contador = 0
 
-with open('entrada.ams', 'r') as arquivo:
+with open('teste.ams', 'r') as arquivo:
     conteudo = arquivo.read()
     instrucao = conteudo.split('\n')
     tamanho = len(instrucao)
@@ -186,7 +236,7 @@ while contador != tamanho:
 
     instrucao[contador] = instrucao[contador].replace(',', '')
     elementos = instrucao[contador].split(' ')
-    if(elementos[0] == 'sb' or elementos[0] == 'lb'):
+    if(elementos[0] in ('sb', 'lb', 'sw', 'lw', 'sh', 'lh')):
         offset, elementos[2] = elementos[2].replace(')', '').split('(')
         elementos.insert(3, offset)
     #bits += (montar(elementos)) + "\n"
