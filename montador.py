@@ -199,6 +199,8 @@ def montar_sb(instrucao):
     return palavra
 
 def base(instrucao):
+    if(instrucao[3][0] == '-'):
+        return format(complementoDeDois(int(instrucao[3])), '012b')
     if(instrucao[3][0:2] == '0b'):
         return format(int(instrucao[3][2:], base=2), '012b')
     elif(instrucao[3][0:2] == '0x'):
@@ -207,6 +209,12 @@ def base(instrucao):
         return format(int(instrucao[3], base=8), '012b')
     else:
         return format(int(instrucao[3]), '012b')
+
+def complementoDeDois(numero):
+    binario = bin(numero)[3:]
+    binario = binario.zfill(12)
+    invertido = "".join(["0" if bit == "1" else "1" for bit in binario])
+    return int(invertido, 2) + 1
 
 
 bits = ""
@@ -229,8 +237,7 @@ with open('teste.ams', 'r') as arquivo:
     instrucao = conteudo.split('\n')
     tamanho = len(instrucao)
 print(f'\n{conteudo}\n')
-while contador != tamanho:
-
+while contador != tamanho :
     if instrucao == 'fim':
         break
 
@@ -239,8 +246,8 @@ while contador != tamanho:
     if(elementos[0] in ('sb', 'lb', 'sw', 'lw', 'sh', 'lh')):
         offset, elementos[2] = elementos[2].replace(')', '').split('(')
         elementos.insert(3, offset)
-    #bits += (montar(elementos)) + "\n"
-    bits += format(int(montar(elementos), 2), '08x') + "\n"
+    bits += (montar(elementos)) + "\n"
+    # bits += hex(int(montar(elementos), base=2)) + "\n"
     contador += 1
 
 print(bits)
