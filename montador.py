@@ -1,3 +1,4 @@
+import argparse
 # def montar_I(instrucao):
 #     opcode = instrucoes[instrucao[0]]["opcode"]
 #     funct3 = instrucoes[instrucao[0]]["funct3"]
@@ -216,23 +217,21 @@ def complementoDeDois(numero):
     invertido = "".join(["0" if bit == "1" else "1" for bit in binario])
     return int(invertido, 2) + 1
 
+parser = argparse.ArgumentParser(description='Montador de código assembly para RISC-V')
+parser.add_argument('entrada', type=str, help='Arquivo de entrada')
+parser.add_argument('-o', '--saida', type=str, help='Arquivo de saída')
+args = parser.parse_args()
+
+# print('Arquivo de entrada: ', args.entrada)
+# if args.saida:
+#     print('Arquivo de saída: ', args.saida)
+# else:
+#     print('Nenhum arquivo de saída especificado')
 
 bits = ""
-# while True:
-#     instrucao = input("Digite um comando (ou 'fim' para encerrar): ")
-#     if instrucao == 'fim':
-#         break
-#     instrucao = instrucao.replace(',', '')
-#     elementos = instrucao.split(' ')
-#     if(elementos[0] == 'sb' or elementos[0] == 'lb'):
-#         offset, elementos[2] = elementos[2].replace(')', '').split('(')
-#         elementos.insert(3, offset)
-#     bits += (montar(elementos)) + "\n"
-# print(bits)
-
 contador = 0
 
-with open('teste.ams', 'r') as arquivo:
+with open(args.entrada, 'r') as arquivo:
     conteudo = arquivo.read()
     instrucao = conteudo.split('\n')
     tamanho = len(instrucao)
@@ -250,7 +249,8 @@ while contador != tamanho :
     # bits += hex(int(montar(elementos), base=2)) + "\n"
     contador += 1
 
-print(bits)
-
-with open('saida.txt', 'w') as f:
-    f.write(bits)
+if args.saida:
+    with open(f"{args.saida}.bin", 'w') as f:
+        f.write(bits)
+else:
+    print(bits)
