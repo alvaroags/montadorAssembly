@@ -213,6 +213,7 @@ def montar_S(instrucao):
     rs1 = format(int(instrucao[2][1:]), '05b')
     rs2 = format(int(instrucao[1][1:]), '05b')
     immediate = base(instrucao)
+    print(instrucao)
     palavra = immediate[0:7] + rs2 + rs1 + funct3 + immediate[7:12] + opcode
     return palavra
 
@@ -223,11 +224,10 @@ def montar_sb(instrucao):
         instrucao.insert(2, "x0")
     rs1 = format(int(instrucao[1][1:]), '05b')
     rs2 = format(int(instrucao[2][1:]), '05b')
-
+    instrucao[3] = int(instrucao[3])//2
+    instrucao[3] = str(instrucao[3])
     immediate = base(instrucao)
-
-    palavra = immediate[0] + immediate[1:7] + rs2 + rs1 + funct3 + immediate[7:11] + immediate[11] + opcode
-
+    palavra = immediate[0] + immediate[2:8] + rs2 + rs1 + funct3 + immediate[8:12] + immediate[1] + opcode
     return palavra
 
 def base(instrucao):
@@ -240,6 +240,7 @@ def base(instrucao):
     elif(instrucao[3][0:2] == '0o'):
         return format(int(instrucao[3], base=8), '012b')
     else:
+        print(instrucao)
         return format(int(instrucao[3]), '012b')
 
 def complementoDeDois(numero):
@@ -272,7 +273,9 @@ while contador != tamanho :
         offset, elementos[2] = elementos[2].replace(')', '').split('(')
         elementos.insert(3, offset)
     bits += (montar(elementos)) + "\n"
-    hexa += hex(int(montar(elementos), base=2)) + "\n"
+
+    saida = bits.split('\n')
+    hexa += format(int(saida[contador], base=2), '08x') + "\n"
     contador += 1
 
 if args.saida:
@@ -284,28 +287,29 @@ else:
     print(hexa)
 
 #entrada com cada uma das instruções
+#lb x1, 0x10(x2)
+#lh x1, 0x10(x2)
+#lw x1, 0x10(x2)
+#sb x1, 0x10(x2)
+#sh x1, 0x10(x2)
+#sw x1, 0x10(x2)
 #add x1, x2, x3
 #sub x1, x2, x3
 #and x1, x2, x3
 #or x1, x2, x3
 #xor x1, x2, x3
+#addi x1, x2, 0x10
+#li x1, 0x10
+#mv x1, x2
+#andi x1, x2, 0x10
+#ori x1, x2, 0x10
 #sll x1, x2, x3
 #srl x1, x2, x3
 #bne x1, x2, 0x10
 #beq x1, x2, 0x10
-#sb x1, 0x10(x2)
-#lb x1, 0x10(x2)
-#sw x1, 0x10(x2)
-#lw x1, 0x10(x2)
-#sh x1, 0x10(x2)
-#lh x1, 0x10(x2)
-
-#pseudo instruções
-#li x1, 0x10
-#mv x1, x2
+#blt x1, x2, 0x10
+#bge x1, x2, 0x10
 #bnez x1, 0x10
 #beqz x1, 0x10
 #bltz x1, 0x10
 #bgez x1, 0x10
-#bge x1, x2, 0x10
-#blt x1, x2, 0x10
