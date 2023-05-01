@@ -1,5 +1,3 @@
-import argparse
-
 instrucoes = {
     "lb": {
         "opcode": "0000011",
@@ -242,9 +240,9 @@ def base(instrucao):
     if(instrucao[3][0:2] == '0b'):
         return format(int(instrucao[3][2:], base=2), '012b')
     elif(instrucao[3][0:2] == '0x'):
-        return format(int(instrucao[3], base=16), '012b')
+        return format(int(instrucao[3][2:], base=16), '012b')
     elif(instrucao[3][0:2] == '0o'):
-        return format(int(instrucao[3], base=8), '012b')
+        return format(int(instrucao[3][2:], base=8), '012b')
     else:
         return format(int(instrucao[3]), '012b')
 
